@@ -91,7 +91,7 @@ class grapho:
             if not candidatas:
                 #print (f"Ruta, Inicio: {inicio}. Fin: {fin}")
                 #print("Trayectoria inconclusa", camino)
-                return camino, "False"
+                return camino, False
             # elegir la mejor arista según la heurística de grado
             mejor_arista = None
             mejor_valor = None  
@@ -112,7 +112,7 @@ class grapho:
 
         #print (f"Ruta, Inicio: {inicio}. Fin: {fin}")
         #print (f"Trayectoria: {camino}")
-        return camino, "True"
+        return camino, True
   #return sum(1 for ar in nodo.conexiones if ar not in usadas)
   
     def grado_restante(self,nodo,usadas): #nodo siguiente, conjunto usadas 
@@ -178,7 +178,7 @@ class grapho:
             fila = {
                 "Num_Ruta": contador, "Nodo_Inicio": inicio.valor, "Nodo_Fin": fin.valor, "Grado_Inicio": len(inicio.conexiones), 
                 "Grado_Fin": len(fin.conexiones), "Estado_Ruta": estado, "Cant_Nodos": len(trayectoria), 
-                "Cant_Aristas": len(trayectoria) - 1, "Camino": trayectoria
+                "Calificacion": 10 - len(trayectoria) , "Camino": trayectoria
                 }
             resultado.append(fila)
             contador += 1
@@ -187,10 +187,10 @@ class grapho:
     #se genera e imprime el resultado
     def generar_dataset(self, datos):         
         print("\n" + "="*110)
-        print(f"{'Num. ruta':<12} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':<8} {'Estado':<8} {'Nodos':<8} {'Aristas':<8} {'Camino':<12}")
+        print(f"{'Num. ruta':<12} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':<8} {'Estado':<8} {'Nodos':<8} {'Calificacion':<14} {'Camino':<12}")
         print("="*110)              
         for fila in datos:
-            print(f"{fila['Num_Ruta']:<12} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<8} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Estado_Ruta']:<8} {fila['Cant_Nodos']:<8} {fila['Cant_Aristas']:<8} {fila['Camino']}")
+            print(f"{fila['Num_Ruta']:<12} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<8} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Estado_Ruta']:<8} {fila['Cant_Nodos']:<8} {fila['Calificacion']:<14} {fila['Camino']}")
         print("="*110)
         return datos
 
@@ -206,7 +206,7 @@ class grapho:
             actual, camino = cola.popleft() # .popleft toma (tambien elimina) el elemento mas antiguo en la cola. (FIFO)
 
             if actual == fin:
-                return camino, "True"
+                return camino, True
 
             for arista in actual.conexiones:
                 if arista.origen == actual:
@@ -218,4 +218,5 @@ class grapho:
                     visitados.add(vecino)
                     cola.append((vecino, camino + [vecino]))    
                     
-        return camino, "False"
+        return camino, False
+   

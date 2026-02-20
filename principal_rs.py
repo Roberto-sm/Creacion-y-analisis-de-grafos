@@ -95,12 +95,8 @@ else:
             df = pd.DataFrame(datos_finales)
             df.to_excel("dataset_grafos.xlsx", index=False) #pasamos el dataset a excel 
 
-            
-            #se imprime el dataset ordenadamente
-         
-            
-
-
+            """se imprime el dataset ordenadamente
+    
             # imprimir_grafo(GrafoCatalogo)
             # rutas = Temp_numero_de_rutas.calcular_permutaciones(GrafoCatalogo) #rutas = lista de listas de nodo inicio y fin
             # rutas_construidas = Temp_numero_de_rutas.evaluar_rutas(GrafoCatalogo,rutas)
@@ -122,7 +118,7 @@ else:
             #     indice_destino=busca_indice(GrafoCatalogo.nodos,trayectoria_destino)
                 
             #     trayectoria =GrafoCatalogo.trayectoria_grado(GrafoCatalogo.nodos[indice_origen],GrafoCatalogo.nodos[indice_destino])                
-            #     print(f"\n{trayectoria}")
+            #     print(f"\n{trayectoria}")"""""
 
         elif(op==4):
             print("hasta la vista")
