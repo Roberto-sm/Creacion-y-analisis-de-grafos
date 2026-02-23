@@ -20,8 +20,10 @@ class grapho:
         def __repr__(self):
             return self.origen.valor + "-" + self.destino.valor
         
-    def __repr__(self):
-            return "Nodos " + self.nodos +" " + "Aristas "+ self.aristas
+    # def __repr__(self):
+    #         return "Nodos " + self.nodos +" " + "Aristas "+ self.aristas
+
+# --- Metodos para construir el grafo ---  
         
     def agregar_nodo(self, valor): #recibe la variable  valor_nodo
             nodo = self.Nodo(valor)
@@ -38,11 +40,17 @@ class grapho:
                     if(n==a.origen or n==a.destino):
                             self.nodos[i].conexiones.append(a) #Se agrega la conexión (origen → destino) a la lista de conexiones del objeto Nodo que se está recorriendo en ese momento (A, B o C).
 
-# ---Eursisticas---
+    def busca_indice(self, g,v): #g = lista de nodos clase grapho, v = nodo de origen ingresado por el usuario
+        for i,n in enumerate(g): # enumerate devuelve pares (tuplas) con la forma: [indice, elemento], esta viene junta, pero si declaramos dos variables la primera almacena el indice y la segunda el elemento
+            if(v==n.valor): #si el nodo ingresado es igual al nodo en la lista de clase grapho
+                return i #retorna el valor i y sale de la funcion/ciclo inmediatamente     
+        
     def grado_nodo (self):
         for n in self.nodos:
             grado = len(n.conexiones)
             print (f"Grado del nodo {n}: {grado}")
+
+# --- Metodos para construir el grafo ---  
              
     def trayectoria(self, inicio, fin):
         if inicio == fin:
@@ -154,8 +162,8 @@ class grapho:
                             mejor_valor = valor
                 return mejor_arista,mejor_valor
     
-    # ---- Construir Dataset ----
 
+# construye todos los nodos inicio-fin
     def calcular_permutaciones(self, grafo):
         rutas=[] #lista de listas
         cont=0
@@ -169,34 +177,37 @@ class grapho:
         print ("Total de permutaciones: ",cont)
         return rutas
 
-    # Este metodo construye los caminos de las rutas dadas (inicios-fines)
+    # Este metodo construye los caminos de las rutas dadas (inicios-fines) y retorna la informacion necesaria para el dataset
     def evaluar_rutas(self, grafo, rutas):  #rutas = la lista de todos los nodos inicio-fin
         contador = 1
         resultado = []
         for inicio, fin in rutas:
             trayectoria, estado = grafo.trayectoria_bfs(inicio, fin) #Aqui podemos seleccionar el metodo de trayectoria
+            vecino = grafo.determinar_vecinos(inicio, fin)
+            scor = len(inicio.conexiones) + len (fin.conexiones) + vecino
+            
+            grafo.determinar_vecinos(inicio, fin)
             fila = {
                 "Num_Ruta": contador, "Nodo_Inicio": inicio.valor, "Nodo_Fin": fin.valor, "Grado_Inicio": len(inicio.conexiones), 
-                "Grado_Fin": len(fin.conexiones), "Estado_Ruta": estado, "Cant_Nodos": len(trayectoria), 
-                "Calificacion": 10 - len(trayectoria) , "Camino": trayectoria
+                "Grado_Fin": len(fin.conexiones), "Llego": estado, "Cant_Nodos": len(trayectoria), "Vecinos": vecino,
+                "Score": scor , "Camino": trayectoria
                 }
             resultado.append(fila)
             contador += 1
         return resultado
 
-    #se genera e imprime el resultado
+    #se construye e imprime el dataset
     def generar_dataset(self, datos):         
         print("\n" + "="*110)
-        print(f"{'Num. ruta':<12} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':<8} {'Estado':<8} {'Nodos':<8} {'Calificacion':<14} {'Camino':<12}")
+        print(f"{'Num. ruta':<12} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':8} {'Llegó':<8} {'Nodos':<8} {'Vecinos':<10} {'Score':<14} {'Camino':<12}")
         print("="*110)              
         for fila in datos:
-            print(f"{fila['Num_Ruta']:<12} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<8} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Estado_Ruta']:<8} {fila['Cant_Nodos']:<8} {fila['Calificacion']:<14} {fila['Camino']}")
+            print(f"{fila['Num_Ruta']:<12} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<84} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Llego']:<8} {fila['Cant_Nodos']:<8} {fila['Vecinos']:<10} {fila['Score']:<14} {fila['Camino']}")
         print("="*110)
         return datos
 
 
     def trayectoria_bfs(self, inicio, fin):
-
         cola = deque() #FIFO. deque() declara una cola de doble extremo
         cola.append((inicio, [inicio])) 
         visitados = set()
@@ -220,3 +231,25 @@ class grapho:
                     
         return camino, False
    
+    def determinar_vecinos (self, inicio, fin):
+        vecinos0 = set()
+        vecinos1 = set()
+
+        for arista in inicio.conexiones:
+            if arista.origen == inicio:
+                vecino = arista.destino
+            else:   
+                vecino = arista.origen
+            vecinos0.add(vecino)
+        
+        for arista in fin.conexiones:
+            if arista.origen == fin:
+                vecino = arista.destino
+            else:   
+                vecino = arista.origen
+            vecinos1.add(vecino)
+        
+        vecinos_comunes = vecinos0.intersection(vecinos1)
+        #print ("vecinos comunes:",vecinos_comunes, "vecinos1:",vecinos0, "vecinos0:",vecinos1)
+        return len(vecinos_comunes)
+
