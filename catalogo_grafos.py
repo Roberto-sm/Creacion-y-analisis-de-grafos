@@ -1,8 +1,7 @@
 import grafo1_rs
+G = grafo1_rs.grapho()
 
 def grafo1():
-    G = grafo1_rs.grapho()
-
     a = G.agregar_nodo("A")
     b = G.agregar_nodo("B")
     c = G.agregar_nodo("C")
@@ -15,7 +14,6 @@ def grafo1():
     return G
 
 def grafo2():
-    G = grafo1_rs.grapho()
     #(Rosa = A) (Fernando = B) (Lorena = C ) (Rafael = D) (Angelica = E) (Luis = F) (Maria = G) (Filiberto = H)
     a = G.agregar_nodo("A")
     b = G.agregar_nodo("B")
@@ -40,7 +38,6 @@ def grafo2():
     return G
 
 def grafo3():
-    G = grafo1_rs.grapho()
     a = G.agregar_nodo("A")
     b = G.agregar_nodo("B")
     c = G.agregar_nodo("C")
