@@ -182,7 +182,7 @@ class grapho:
         contador = 1
         resultado = []
         for inicio, fin in rutas:
-            trayectoria, estado = grafo.trayectoria_bfs(inicio, fin) #Aqui podemos seleccionar el metodo de trayectoria
+            trayectoria, estado = grafo.trayectoria_bfs(inicio, fin) #Aqui podemos cambiar el metodo de trayectoria
             vecino = grafo.determinar_vecinos(inicio, fin)
             scor = len(inicio.conexiones) + len (fin.conexiones) + vecino
             
@@ -199,10 +199,10 @@ class grapho:
     #se construye e imprime el dataset
     def generar_dataset(self, datos):         
         print("\n" + "="*110)
-        print(f"{'Num. ruta':<12} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':8} {'Llegó':<8} {'Nodos':<8} {'Vecinos':<10} {'Score':<14} {'Camino':<12}")
+        print(f"{'Num. ruta':<10} {'Inicio':<8} {'Fin':<8} {'G_Ini':<8} {'G_Fin':8} {'Llegó':<8} {'Nodos':<8} {'Vecinos':<10} {'Score':<10} {'Camino':<12}")
         print("="*110)              
         for fila in datos:
-            print(f"{fila['Num_Ruta']:<12} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<84} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Llego']:<8} {fila['Cant_Nodos']:<8} {fila['Vecinos']:<10} {fila['Score']:<14} {fila['Camino']}")
+            print(f"{fila['Num_Ruta']:<10} {fila['Nodo_Inicio']:<8} {fila['Nodo_Fin']:<8} {fila['Grado_Inicio']:<8} {fila['Grado_Fin']:<8} {fila['Llego']:<8} {fila['Cant_Nodos']:<8} {fila['Vecinos']:<10} {fila['Score']:<10} {fila['Camino']}")
         print("="*110)
         return datos
 
@@ -253,3 +253,16 @@ class grapho:
         #print ("vecinos comunes:",vecinos_comunes, "vecinos1:",vecinos0, "vecinos0:",vecinos1)
         return len(vecinos_comunes)
 
+    def grafica_dispersion_grados(self,datos):
+        import matplotlib.pyplot as plt
+        # datos = lista de diccionarios que retorna evaluar_rutas
+
+        x = [fila["Vecinos"] for fila in datos]
+        y = [fila["Score"] for fila in datos]
+        plt.figure()
+        plt.scatter(x, y)
+        plt.title("Gráfica de dispersión: Vecinos - Score")
+        plt.xlabel("Nodos vecinos")
+        plt.ylabel("Score")
+        plt.grid()
+        plt.show()

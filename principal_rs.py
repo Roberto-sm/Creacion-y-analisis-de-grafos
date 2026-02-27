@@ -94,6 +94,7 @@ else:
 
             #vc = ClaseGrafo.determinar_vecinos()
             datos_finales = ClaseGrafo.generar_dataset(bfs) #se genera el dataset
+            ClaseGrafo.grafica_dispersion_grados(datos_finales)
             df = pd.DataFrame(datos_finales)
             df.to_excel("dataset_grafos.xlsx", index=False) #pasamos el dataset a excel 
 
